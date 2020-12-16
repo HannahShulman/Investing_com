@@ -1,6 +1,5 @@
 package com.hanna.investing_com.network
 
-import android.util.Log
 import com.hanna.investing_com.entities.ResponseStatus
 import retrofit2.Response
 

@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -98,9 +97,9 @@ class MainActivity : AppCompatActivity() {
             mMapView.mapRenderMode
             mMapView.setScene(
                 MapScene.createFromLocationAndZoomLevel(point, 15.toDouble()),
-                MapAnimationKind.NONE
+                MapAnimationKind.DEFAULT
             )
-
+            pointsOfInterestLayer.elements.clear()//when location is updated nearest points should be removed,
             val icon =
                 AppCompatResources.getDrawable(baseContext, R.drawable.ic_baseline_location_on_24)
                     ?.toBitmap()
@@ -118,7 +117,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModel.nearbyPointsOfInterest.observe(this, {
-            Log.d(TAG, "http create23  ${it.status}")
             when (it.status) {
                 Status.LOADING -> {
                 }
@@ -208,7 +206,6 @@ class MainActivity : AppCompatActivity() {
         )
 
         if (shouldProvideRationale) {
-            Log.i(TAG, "Displaying permission rationale to provide additional context.")
             Snackbar.make(
                 findViewById(R.id.activity_main),
                 R.string.permission_rationale,
@@ -221,7 +218,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 .show()
         } else {
-            Log.i(TAG, "Requesting permission")
             ActivityCompat.requestPermissions(
                 this@MainActivity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_PERMISSIONS_REQUEST_CODE
@@ -236,7 +232,6 @@ class MainActivity : AppCompatActivity() {
         requestCode: Int, permissions: Array<String>,
         grantResults: IntArray
     ) {
-        Log.i(TAG, "onRequestPermissionResult")
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             when {
                 grantResults.isEmpty() -> {
